@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <!--<div class="img-row">-->
+    <!--    <div class="img-column">-->
+    <!--        <img src="/images/sample-img.jpg" style="width:50%">-->
+    <!--    </div>-->
+    <!--    <div class="img-column">-->
+    <!--        <img src="../images/sample-img.jpg" style="width:50%">-->
+    <!--    </div>-->
+    <!--    <div class="img-column">-->
+    <!--        <img src="../templates/images/sample-img.jpg" alt="Plot1" style="width:50%">-->
+    <!--    </div>-->
+    <!--    <div class="img-column">-->
+    <!--        <img src="/templates/images/sample-img.jpg" alt="Plot1" style="width:50%">-->
+    <!--    </div>-->
+    <!--</div>-->
+
+    <div id="main">
+        {% if FluenceInput == None %}
+            <h4 style="color:red;"> Error: Please submit the form in the Home Page</h4>
+        {% endif %}
+        {% if FluenceInput != None %}
+            <table class="table table-bordered table-sm">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">P</th>
+                  <th scope="col">d0</th>
+                  <th scope="col">t1</th>
+                  <th scope="col">dp1</th>
+                  <th scope="col">dh1</th>
+                  <th scope="col">t2</th>
+                  <th scope="col">dp2</th>
+                  <th scope="col">dh2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{FluenceInput[0]}}</td>
+                  <td>{{FluenceInput[1]}}</td>
+                  <td>{{FluenceInput[2]}}</td>
+                  <td>{{FluenceInput[3]}}</td>
+                  <td>{{FluenceInput[4]}}</td>
+                  <td>{{FluenceInput[5]}}</td>
+                  <td>{{FluenceInput[6]}}</td>
+                  <td>{{FluenceInput[7]}}</td>
+                </tr>
+              </tbody>
+            </table>
+        {% endif %}
+
+        {% if FluenceOutput != None %}
+
+            <table class="table table-bordered table-sm">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">F0</th>
+                  <th scope="col">F01</th>
+                  <th scope="col">F</th>
+                  <th scope="col">F1</th>
+                  <th scope="col">Flineminx</th>
+                  <th scope="col">Flineminy</th>
+                  <th scope="col">Flinemaxx</th>
+                  <th scope="col">Flinemaxy</th>
+                  <th scope="col">Fmean</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{FluenceOutput[0]}}</td>
+                  <td>{{FluenceOutput[1]}}</td>
+                  <td>{{FluenceOutput[2]}}</td>
+                  <td>{{FluenceOutput[3]}}</td>
+                  <td>{{FluenceOutput[4]}}</td>
+                  <td>{{FluenceOutput[5]}}</td>
+                  <td>{{FluenceOutput[6]}}</td>
+                  <td>{{FluenceOutput[7]}}</td>
+                  <td>{{FluenceOutput[8]}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div>
+                <img src={{ plot1 }} alt="error" width="500" height="333"></img>
+            </div>
+
+            <div>
+                <img src={{ plot2 }} alt="error" width="500" height="333"></img>
+            </div>
+            <div>
+                <img src={{ plot3 }} alt="error" width="500" height="333"></img>
+            </div>
+
+            <div>
+                <img src={{ plot1 }} alt="error" width="500" height="333"></img>
+            </div>
+
+            <div>
+                <img src={{ plot1 }} alt="error" width="500" height="333"></img>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+
+            <div>
+              <fieldset>
+                  <legend>Fluence Distribution:</legend>
+                  <label for="P">P: </label>
+                  <input type="number" step=0.001 id="P" name="P"><br />
+                  <label for="d0">d0: </label>
+                  <input type="number" step=0.001 id="d0" name="d0"><br />
+                  <label for="t1">t1: </label>
+                  <input type="number" class="form-control" step=0.001 id="t1" name="t1"><br />
+                  <label for="dp1">dp1: </label>
+                  <input type="number" class="form-control" step=0.001 id="dp1" name="dp1">
+                  <label for="dh1">dh1: </label>
+                  <input type="number" class="form-control" step=0.001 id="dh1" name="dh1"><br />
+                  <label for="t2">t2: </label>
+                  <input type="number" class="form-control" step=0.001 id="t2" name="t2"><br />
+                  <label for="dp2">dp2: </label>
+                  <input type="number" class="form-control" step=0.001 id="dp2" name="dp2"><br />
+                  <label for="dh2">dh2: </label>
+                  <input type="number" class="form-control" step=0.001 id="dh2" name="dh2"><br />
+              </fieldset>
+            </div>
+
+
+    <p>
+        {% if FFF != None %}
+            <strong>P</strong>: {{P}} <br>
+            <strong>d0</strong>: {{d0}} <br>
+            <strong>t1</strong>: {{t1}} <br>
+            <strong>dp1</strong>: {{dp1}} <br>
+            <strong>dh1</strong>: {{dh1}} <br>
+            <strong>t2</strong>: {{t2}} <br>
+            <strong>dp2</strong>: {{dp2}} <br>
+            <strong>dh2</strong>: {{dh2}} <br>
+            <strong>FFF</strong>: {{FFF[0]}}<br>
+            <strong>FFF</strong>: {{FFF[1]}}<br>
+            <strong>FFF</strong>: {{FFF[2]}}<br>
+            <strong>FFF</strong>: {{FFF[3]}}<br>
+            <strong>FFF</strong>: {{FFF[4]}}<br>
+            <strong>FFF</strong>: {{FFF[5]}}<br>
+            <strong>FFF</strong>: {{FFF[6]}}<br>
+            <strong>FFF</strong>: {{FFF[7]}}<br>
+            <strong>FFF</strong>: {{FFF[8]}}<br>
+        {% endif %}
+       </p>
