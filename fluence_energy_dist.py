@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import io
 import base64
+import threading
 
 def program(P, d0, t1, dp1, dh1, t2, dp2, dh2):
 
@@ -72,15 +73,33 @@ def fluence_energy_dist_over_larger_distance(P, d0, t1, dp1, dh1, t2, dp2, dh2):
 
     Fmean = np.mean(aaa)
 
-    # Contour Plot for aaa
+    FFF = [F0, F01, F, F1,Flineminx, Flineminy,Flinemaxx, Flinemaxy, Fmean]
+
     plot1 = compute_plot_aaa(aaa,dx)
     plot2 = compute_plot_fp(P,t1,t2,d0,dp,dh,x,y,Fp,w0)
     plot3 = compute_plot_ftot(dp,dh,x,y,Ftot,w0)
+    plot4 = compute_plot_ftot_x_axis(x,y,Ftot,w0,dx,F0,dp,n,Flineminx,Flinemaxx,Fmean)
+    plot5 = compute_plot_ftot_y_axis(x,y,Ftot,w0,dx,F0,dh,m,Flineminy,Fmean)
 
-    FFF = [F0, F01, F, F1,Flineminx, Flineminy,Flinemaxx, Flinemaxy, Fmean]
-    print(FFF)
-    print(plot1)
-    return FFF, plot1, plot2, plot3;
+    # # Plots executing in different threads
+    # plot1 = threading.Thread(target=compute_plot_aaa, args=(aaa,dx))
+    # plot2 = threading.Thread(target=compute_plot_fp, args=(P,t1,t2,d0,dp,dh,x,y,Fp,w0))
+    # plot3 = threading.Thread(target=compute_plot_ftot, args=(dp,dh,x,y,Ftot,w0))
+    # plot4 = threading.Thread(target=compute_plot_ftot_x_axis, args=(x,y,Ftot,w0,dx,F0,dp,n,Flineminx,Flinemaxx,Fmean))
+    # plot5 = threading.Thread(target=compute_plot_ftot_y_axis, args=(x,y,Ftot,w0,dx,F0,dh,m,Flineminy,Fmean))
+
+    # plot1.start()
+    # plot2.start()
+    # plot3.start()
+    # plot4.start()
+    # plot5.start()
+
+    # plot1 = plot1.join()
+    # plot2 = plot2.join()
+    # plot3 = plot3.join()
+    # plot4 = plot4.join()
+    # plot5 = plot5.join()
+    return FFF, plot1, plot2, plot3, plot4, plot5;
 
 def compute_plot_aaa(aaa,dx):
     bytes_image = io.BytesIO()
@@ -93,7 +112,6 @@ def compute_plot_aaa(aaa,dx):
     ax.contour(X,Y,aaa)
     ax.set_xlabel('Scan direction x (\mum)')
     ax.set_ylabel('Line overlap direction y (\mum)')
-    # plt.show()
     plt.savefig(bytes_image, format='png')
     bytes_image.seek(0)
     plot_url = base64.b64encode(bytes_image.getvalue()).decode()
@@ -109,8 +127,6 @@ def compute_plot_fp(P,t1,t2,d0,dp,dh,x,y,Fp,w0):
     ax1.axis([-w0, w0, -w0, w0])
     ax1.set_xlabel('r (\mum)')
     ax1.set_ylabel('r (\mum)')
-    # plt.show()
-    # plt.show()
     plt.savefig(bytes_image, format='png')
     bytes_image.seek(0)
     plot_url = base64.b64encode(bytes_image.getvalue()).decode()
@@ -121,15 +137,41 @@ def compute_plot_ftot(dp,dh,x,y,Ftot,w0):
     fig, ax2 = plt.subplots()
     plt.rcParams['lines.linewidth'] = 1
     CS = ax2.contour(x,y,Ftot,20)
-    # plt.imshow(Ftot)
-    # plt.colorbar();
     fig.colorbar(CS, ax=ax2)
     ax2.axis([-dp, max(x), -dp, max(y)])
     ax2.set_xlabel('d_p (\mum)')
     ax2.set_ylabel('d_h (\mum)')
-    # plt.show()
-    # plt.show()
-    # plt.show()
+    plt.savefig(bytes_image, format='png')
+    bytes_image.seek(0)
+    plot_url = base64.b64encode(bytes_image.getvalue()).decode()
+    return  'data:image/png;base64,{}'.format(plot_url)
+
+def compute_plot_ftot_x_axis(x,y,Ftot,w0,dx,F0,dp,n,Flineminx,Flinemaxx,Fmean):
+    bytes_image = io.BytesIO()
+    fig, ax3 = plt.subplots()
+    ax3.plot(x,Ftot[int(2*w0/dx),:])
+    ax3.axis([-w0, dp*n, 0, 5750])
+    ax3.axhline(y = F0, color='b', linestyle='--')
+    ax3.axhline(y = Flineminx, color='g', linestyle='--')
+    ax3.axhline(y = Flinemaxx, color='r', linestyle='--')
+    ax3.axhline(y = Fmean, color='k', linestyle='--')
+    ax3.set_xlabel('Scan direction x (\mum)')
+    ax3.set_ylabel('F_a_c_c (J/cm^2)')
+    plt.savefig(bytes_image, format='png')
+    bytes_image.seek(0)
+    plot_url = base64.b64encode(bytes_image.getvalue()).decode()
+    return  'data:image/png;base64,{}'.format(plot_url)
+
+def compute_plot_ftot_y_axis(x,y,Ftot,w0,dx,F0,dh,m,Flineminy,Fmean):
+    bytes_image = io.BytesIO()
+    fig, ax4 = plt.subplots()
+    ax4.plot(x,Ftot[:,int(2*w0/dx)])
+    ax4.axhline(y = F0, color='b', linestyle='--')
+    ax4.axhline(y = Flineminy, color='g', linestyle='--')
+    ax4.axhline(y = Fmean, color='b', linestyle='--')
+    ax4.axis([-w0, dh*m, 0, 5750])
+    ax4.set_xlabel('Line overlap direction y (\mum)')
+    ax4.set_ylabel('F_a_c_c (J/cm^2)')
     plt.savefig(bytes_image, format='png')
     bytes_image.seek(0)
     plot_url = base64.b64encode(bytes_image.getvalue()).decode()
